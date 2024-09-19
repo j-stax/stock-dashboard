@@ -80,7 +80,7 @@ async function FetchData(ticker, type) {
                     const balanceSheetObj = {
                         id: count,
                         year: balanceSheet["fiscalDateEnding"].substring(0, 4),
-                        workingCapital: workingCapital,
+                        workingCapital: workingCapital
                     };
 
                     if (count === 1) {
