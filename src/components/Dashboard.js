@@ -14,7 +14,7 @@ import DCFModel from "./DCFModel";
 import TickerBanner from "./TickerBanner";
 
 function Dashboard() {
-    const [tickerInput, setTickerInput] = useState("PLTR");
+    const [tickerInput, setTickerInput] = useState("NVDA");
     const [priceData, setPriceData] = useState([]);
     const [ebitData, setEbitData] = useState([]);
     const [balanceSheetData, setBalanceSheetData] = useState([]);
@@ -69,7 +69,7 @@ function Dashboard() {
                 <Form.Control 
                     type="text" 
                     id="ticker" 
-                    placeholder="Enter ticker (e.g., PLTR)" 
+                    placeholder="Enter ticker (e.g., NVDA)" 
                     autoFocus
                     className="w-25 d-inline mt-5 mb-5 text-uppercase" />
                 <Button type="submit" className="ms-2">Search</Button>
