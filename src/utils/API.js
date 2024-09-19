@@ -63,8 +63,8 @@ async function FetchData(ticker, type) {
             else if (result["annualReports"][0]["totalAssets"]) {       // cash, debt, common shares outstanding, working capital
                 
                 const annualReports = result["annualReports"];
-                const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndCashEquivalentsAtCarryingValue"]) / 1000000);
-                const totalDebt = Math.round(parseInt(annualReports[0]["totalLiabilities"]) / 1000000);
+                const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndShortTermInvestments"]) / 1000000);
+                const totalDebt = Math.round( (parseInt(annualReports[0]["shortTermDebt"]) + parseInt(annualReports[0]["longTermDebt"])) / 1000000);
                 const shareCount = Math.round(parseInt(annualReports[0]["commonStockSharesOutstanding"]) / 1000000);
 
                 for (let balanceSheet of annualReports) {

@@ -25,33 +25,35 @@ function Dashboard() {
     function handleSubmit(event) {
         event.preventDefault();
         setResponseOk(false);
-        setTickerInput(event.target.ticker.value.trim().toUpperCase());
+        const input = event.target.ticker.value.trim().toUpperCase();
+        const tickerInputPrev = tickerInput;
+        if ((input.length !== 0) && (input !== tickerInput) && (input !== tickerInputPrev)) {
+            setTickerInput(input);
+        }
+        else {
+            alert("Enter a new ticker.");
+        }
     }
 
     useEffect( () => {
         async function getStockData() {
             try {
-                if (tickerInput) {
-                    setIsLoading(true);            
-                    const priceDataResponse = await FetchData(tickerInput, "price");
-                    const ebitDataResponse = await FetchData(tickerInput, "ebit");
-                    const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
-                    const capexDataResponse = await FetchData(tickerInput, "capex");
+                setIsLoading(true);            
+                const priceDataResponse = await FetchData(tickerInput, "price");
+                const ebitDataResponse = await FetchData(tickerInput, "ebit");
+                const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
+                const capexDataResponse = await FetchData(tickerInput, "capex");
 
-                    setIsLoading(false);
-                    if (priceDataResponse !== null) {
-                        setPriceData(priceDataResponse);
-                        setEbitData(ebitDataResponse);
-                        setBalanceSheetData(balanceSheetDataResponse);
-                        setCapexData(capexDataResponse);
-                        setResponseOk(true);
-                    }
-                    else {
-                        alert(`Error: check ticker symbol.`);
-                    }
-                }    
+                setIsLoading(false);
+                if (priceDataResponse !== null) {
+                    setPriceData(priceDataResponse);
+                    setEbitData(ebitDataResponse);
+                    setBalanceSheetData(balanceSheetDataResponse);
+                    setCapexData(capexDataResponse);
+                    setResponseOk(true);
+                }
                 else {
-                    alert("Enter a ticker.");
+                    alert(`Error: check ticker symbol.`);
                 }
             }
             catch (exception) {
@@ -69,7 +71,7 @@ function Dashboard() {
                 <Form.Control 
                     type="text" 
                     id="ticker" 
-                    placeholder="Enter ticker (e.g., NVDA)" 
+                    placeholder="Enter ticker (e.g., PLTR)"
                     autoFocus
                     className="w-25 d-inline mt-5 mb-5 text-uppercase" />
                 <Button type="submit" className="ms-2">Search</Button>

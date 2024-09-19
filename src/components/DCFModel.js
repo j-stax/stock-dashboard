@@ -19,13 +19,13 @@ function DCFModel(props) {
 
     function handleYearZeroChange(event) {
         const name = event.target.name;
-        const value = event.target.value;
+        const value = parseInt(event.target.value);
         setYearZeroVals(values => ({...values, [name]: value}));
     }
 
     function handleForecastChange(event) {
         const name = event.target.id;
-        const value = event.target.value;
+        const value = parseInt(event.target.value);
         setForecastVals(values => ({...values, [name]: value}));
     }
 
@@ -132,48 +132,52 @@ function DCFModel(props) {
                         <td className="w-75">EBIT growth rate</td>
                         <td className="text-center">
                             <input
-                                className="w-50 text-center"
+                                className="w-50 text-center me-1"
                                 type="text"
                                 id="growthRate"
                                 name="growthRate"
                                 value={assumps.growthRate || 0} 
-                                onChange={handleAssumpChange} />
+                                onChange={handleAssumpChange} 
+                            />%
                         </td>
                     </tr>
                     <tr>
                         <td>Tax rate</td>
                         <td className="text-center">
                             <input
-                                className="w-50 text-center"
+                                className="w-50 text-center me-1"
                                 type="text"
                                 id="taxRate"
                                 name="taxRate"
                                 value={assumps.taxRate || 0} 
-                                onChange={handleAssumpChange} />
+                                onChange={handleAssumpChange} 
+                            />%
                         </td>
                     </tr>
                     <tr>
                         <td>Discount Rate</td>
                         <td className="text-center">
                             <input
-                                className="w-50 text-center"
+                                className="w-50 text-center me-1"
                                 type="text"
                                 id="discRate"
                                 name="discRate"
                                 value={assumps.discRate || 0} 
-                                onChange={handleAssumpChange} />
+                                onChange={handleAssumpChange} 
+                            />%
                         </td>
                     </tr>
                     <tr>
                         <td>Terminal Rate</td>
                         <td className="text-center">
                             <input
-                                className="w-50 text-center"
+                                className="w-50 text-center me-1"
                                 type="text"
                                 id="terminalRate"
                                 name="terminalRate"
                                 value={assumps.terminalRate || 0} 
-                                onChange={handleAssumpChange} />
+                                onChange={handleAssumpChange} 
+                            />%
                         </td>
                     </tr>
                 </tbody>
