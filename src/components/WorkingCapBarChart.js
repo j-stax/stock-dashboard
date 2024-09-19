@@ -13,7 +13,7 @@ function WorkingCapBarChart(props) {
         datasets: [
             {
                 label: "Working Capital $Millions (5 Years)",
-                data: props.data.map((data) => data.value),
+                data: props.data.map((data) => data.workingCapital),
                 backgroundColor: "cyan"
             }
         ]

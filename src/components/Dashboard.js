@@ -17,7 +17,7 @@ function Dashboard() {
     const [tickerInput, setTickerInput] = useState("PLTR");
     const [priceData, setPriceData] = useState([]);
     const [ebitData, setEbitData] = useState([]);
-    const [workingCapData, setWorkingCapData] = useState([]);
+    const [balanceSheetData, setBalanceSheetData] = useState([]);
     const [capexData, setCapexData] = useState([]);
     const [responseOk, setResponseOk] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,14 +35,14 @@ function Dashboard() {
                     setIsLoading(true);            
                     const priceDataResponse = await FetchData(tickerInput, "price");
                     const ebitDataResponse = await FetchData(tickerInput, "ebit");
-                    const workingCapDataResponse = await FetchData(tickerInput, "working capital");
+                    const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
                     const capexDataResponse = await FetchData(tickerInput, "capex");
 
                     setIsLoading(false);
                     if (priceDataResponse !== null) {
                         setPriceData(priceDataResponse);
                         setEbitData(ebitDataResponse);
-                        setWorkingCapData(workingCapDataResponse);
+                        setBalanceSheetData(balanceSheetDataResponse);
                         setCapexData(capexDataResponse);
                         setResponseOk(true);
                     }
@@ -95,14 +95,14 @@ function Dashboard() {
                         </Row>
                         <Row>
                             <Col>
-                                <WorkingCapBarChart ticker={tickerInput} data={[...workingCapData].reverse()} />
+                                <WorkingCapBarChart ticker={tickerInput} data={[...balanceSheetData].reverse()} />
                             </Col>
                             <Col>
                                 <CapexBarChart ticker={tickerInput} data={[...capexData].reverse()} />
                             </Col>
                         </Row>
                     </Container>
-                    <DCFModel shares={workingCapData[0].shares} />
+                    <DCFModel cash={balanceSheetData[0].cash} debt={balanceSheetData[0].debt} shares={balanceSheetData[0].shares} />
                 </>
             }
         </Container>

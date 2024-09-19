@@ -21,7 +21,7 @@ async function FetchData(ticker, type) {
         case "ebit":
             urlFunction = "INCOME_STATEMENT";
             break;
-        case "working capital":
+        case "balance sheet":
             urlFunction = "BALANCE_SHEET";
             break;
         case "capex":
@@ -60,8 +60,12 @@ async function FetchData(ticker, type) {
                     count += 1;
                 }
             }
-            else if (result["annualReports"][0]["totalAssets"]) {       // Working capital data + common shares outstanding
+            else if (result["annualReports"][0]["totalAssets"]) {       // data + common shares outstanding
+                
                 const annualReports = result["annualReports"];
+                const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndCashEquivalentsAtCarryingValue"]) / 1000000);
+                const totalDebt = Math.round(parseInt(annualReports[0]["totalLiabilities"]) / 1000000);
+                const shareCount = Math.round(parseInt(annualReports[0]["commonStockSharesOutstanding"]) / 1000000);
 
                 for (let balanceSheet of annualReports) {
                     if (count > 5) {
@@ -72,14 +76,18 @@ async function FetchData(ticker, type) {
                     let inventory = parseInt(balanceSheet["inventory"]);
                     let acctsPayable = parseInt(balanceSheet["currentAccountsPayable"]);
                     let workingCapital = (acctsReceivables + inventory - acctsPayable) / 1000000;
-                    let shareCount = Math.round(parseInt(balanceSheet["commonStockSharesOutstanding"]) / 1000000);
 
                     const balanceSheetObj = {
                         id: count,
                         year: balanceSheet["fiscalDateEnding"].substring(0, 4),
-                        value: workingCapital,
-                        shares: shareCount
+                        workingCapital: workingCapital,
                     };
+
+                    if (count === 1) {
+                        balanceSheetObj["cash"] = cashAndCashEquiv;
+                        balanceSheetObj["debt"] = totalDebt;
+                        balanceSheetObj["shares"] = shareCount;
+                    }
 
                     dataArray.push(balanceSheetObj);
                     count += 1;
