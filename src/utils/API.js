@@ -60,7 +60,7 @@ async function FetchData(ticker, type) {
                     count += 1;
                 }
             }
-            else if (result["annualReports"][0]["totalAssets"]) {       // data + common shares outstanding
+            else if (result["annualReports"][0]["totalAssets"]) {       // cash, debt, common shares outstanding, working capital
                 
                 const annualReports = result["annualReports"];
                 const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndCashEquivalentsAtCarryingValue"]) / 1000000);
