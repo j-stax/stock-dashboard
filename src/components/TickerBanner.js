@@ -4,23 +4,39 @@ import { ReactTicker } from "@guna81/react-ticker";
 
 function TickerBanner() {
     const [bannerDataList, setBannerDataList] = useState([
-        { id: 1, symbol: "USD/CAD", price: "" },
-        { id: 2, symbol: "BTC", price: "" },
-        { id: 3, symbol: "NVDA", price: "" },
-        { id: 4, symbol: "AMD", price: "" },
-        { id: 5, symbol: "PLTR", price: "" },
-        { id: 6, symbol: "META", price: "" },
-        { id: 7, symbol: "AAPL", price: "" },
-        { id: 8, symbol: "GOOGL", price: "" },
-        { id: 9, symbol: "TSLA", price: "" },
-        { id: 10, symbol: "QXO", price: "" }
+        { id: 1, symbol: "NVDA", price: "" },
+        { id: 2, symbol: "AMD", price: "" },
+        { id: 3, symbol: "PLTR", price: "" },
+        { id: 4, symbol: "META", price: "" },
+        { id: 5, symbol: "AAPL", price: "" },
+        { id: 6, symbol: "GOOGL", price: "" },
+        { id: 7, symbol: "TSLA", price: "" },
+        { id: 8, symbol: "QXO", price: "" },
+        { id: 9, symbol: "USD/CAD", price: "" },
+        { id: 10, symbol: "USD/JPY", price: "" },
+        { id: 11, symbol: "EUR/CAD", price: "" },
+        { id: 12, symbol: "GBP/CAD", price: "" },
+        { id: 13, symbol: "BTC", price: "" }
     ]);
+
+    async function getExchangeRate(pair, apiKey) {
+        const numer = pair.substring(0, 3);
+        const denom = pair.substring(4);
+        const forexUrl = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${numer}&to_symbol=${denom}&interval=5min&apikey=${apiKey}`;
+        const forexResponse = await fetch(forexUrl);
+        if (forexResponse.ok) {
+            const forexResult = await forexResponse.json();
+            const lastRefreshed = forexResult["Meta Data"]["4. Last Refreshed"];
+            let exchRate = forexResult["Time Series FX (5min)"][lastRefreshed]["4. close"];
+            exchRate = parseFloat(exchRate).toFixed(3).toString();
+            return exchRate;
+        }   
+        return null;
+    }
 
     useEffect(() => {
         async function fetchTickerData() {
-
             const apiKey = "Y7I5R3PL5KTSMQB2";
-            const forexUrl = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=USD&to_symbol=CAD&interval=5min&apikey=${apiKey}`;
             const btcUrl = `https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=5min&apikey=${apiKey}`;
             let updatedBannerDataList = [...bannerDataList];
 
@@ -28,28 +44,40 @@ function TickerBanner() {
                 let bannerDataListObject = bannerDataList[i];
                 let symbol = bannerDataListObject.symbol;
                 let stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&entitlement=delayed&apikey=${apiKey}`;
+                let lastRefreshed = "";
 
-                if (symbol === "USD/CAD") {
-                    let forexResponse = await fetch(forexUrl);
-                    let forexResult = await forexResponse.json();
-                    let lastRefreshed = forexResult["Meta Data"]["4. Last Refreshed"];
-                    let exchRate = forexResult["Time Series FX (5min)"][lastRefreshed]["4. close"];
-                    updatedBannerDataList[i].price = parseFloat(exchRate).toFixed(2).toString();
-                }
-                else if (symbol === "BTC") {
-                    let btcResponse = await fetch(btcUrl);
-                    let btcResult = await btcResponse.json();
-                    let lastRefreshed = btcResult["Meta Data"]["6. Last Refreshed"];
-                    let btcPrice = btcResult["Time Series Crypto (5min)"][lastRefreshed]["4. close"];
-                    updatedBannerDataList[i].price = parseFloat(btcPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                }
-                else {
-                    let stockResponse = await fetch(stockUrl);
-                    let result = await stockResponse.json();
-                    let lastRefreshed = result["Meta Data"]["3. Last Refreshed"];
-                    let priceMap = result["Time Series (5min)"];
-                    let price = priceMap[lastRefreshed]["4. close"];
-                    updatedBannerDataList[i].price = parseFloat(price).toFixed(2).toString();
+                switch (symbol) {
+                    case "USD/CAD":
+                        updatedBannerDataList[i].price = await getExchangeRate(symbol, apiKey);
+                        break;
+
+                    case "USD/JPY":
+                        updatedBannerDataList[i].price = await getExchangeRate(symbol, apiKey);
+                        break;
+
+                    case "EUR/CAD":
+                        updatedBannerDataList[i].price = await getExchangeRate(symbol, apiKey);
+                        break;
+
+                    case "GBP/CAD":
+                        updatedBannerDataList[i].price = await getExchangeRate(symbol, apiKey);
+                        break;
+
+                    case "BTC":
+                        let btcResponse = await fetch(btcUrl);
+                        let btcResult = await btcResponse.json();
+                        lastRefreshed = btcResult["Meta Data"]["6. Last Refreshed"];
+                        let btcPrice = btcResult["Time Series Crypto (5min)"][lastRefreshed]["4. close"];
+                        updatedBannerDataList[i].price = parseFloat(btcPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        break;
+
+                    default:
+                        let stockResponse = await fetch(stockUrl);
+                        let result = await stockResponse.json();
+                        lastRefreshed = result["Meta Data"]["3. Last Refreshed"];
+                        let priceMap = result["Time Series (5min)"];
+                        let price = priceMap[lastRefreshed]["4. close"];
+                        updatedBannerDataList[i].price = parseFloat(price).toFixed(2).toString();
                 }
             };
             setBannerDataList(updatedBannerDataList);
@@ -86,7 +114,7 @@ function TickerBanner() {
                     top: "0",
                     left: "0",
                     width: "100%",
-                    height: "50px",
+                    height: "60px",
                     backgroundColor: "#000000",
                     zIndex: 99
                 }}
