@@ -4,7 +4,11 @@ import { useState } from "react";
 function DCFModel(props) {
 
     const [assumps, setAssumps] = useState({});
-    const [yearZeroVals, setYearZeroVals] = useState({ numShares: props.shares });
+    const [yearZeroVals, setYearZeroVals] = useState({ 
+        cash: props.cash,
+        debt: props.debt,
+        numShares: props.shares,
+    });
     const [forecastVals, setForecastVals] = useState({});
 
     function handleAssumpChange(event) {
@@ -304,7 +308,7 @@ function DCFModel(props) {
                                     className="w-75 text-end"
                                     id={"chngInWorkingCap" + (index+1)}
                                     name={"chngInWorkingCap" + (index+1)}
-                                    value={forecastVals["chngInWorkingCap" + (index+1)] = generateForecast("chngInWorkingCap", index+1) || 0}
+                                    value={forecastVals["chngInWorkingCap" + (index+1)] = parseInt(forecastVals["chngInWorkingCap" + (index+1)]) || 0}
                                     onChange={handleForecastChange} />
                             </td>        
                         ))}
@@ -447,7 +451,7 @@ function DCFModel(props) {
                                 className="w-75 text-end"
                                 id="debt"
                                 name="debt"
-                                value={yearZeroVals.debt = parseInt(yearZeroVals.debt) || 0}
+                                value={yearZeroVals.debt = yearZeroVals.debt || 0}
                                 onChange={handleYearZeroChange} />
                         </td>
                     </tr>
@@ -459,7 +463,7 @@ function DCFModel(props) {
                                 className="w-75 text-end"
                                 id="cash"
                                 name="cash"
-                                value={yearZeroVals.cash = parseInt(yearZeroVals.cash) || 0}
+                                value={yearZeroVals.cash = yearZeroVals.cash || 0}
                                 onChange={handleYearZeroChange} />
                         </td>
                     </tr>
