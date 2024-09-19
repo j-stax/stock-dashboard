@@ -68,7 +68,7 @@ function TickerBanner() {
                         let btcResult = await btcResponse.json();
                         lastRefreshed = btcResult["Meta Data"]["6. Last Refreshed"];
                         let btcPrice = btcResult["Time Series Crypto (5min)"][lastRefreshed]["4. close"];
-                        updatedBannerDataList[i].price = parseFloat(btcPrice).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        updatedBannerDataList[i].price = parseInt(btcPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         break;
 
                     default:
