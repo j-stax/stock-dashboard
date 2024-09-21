@@ -45,7 +45,7 @@ function Dashboard() {
                 const capexDataResponse = await FetchData(tickerInput, "capex");
 
                 setIsLoading(false);
-                if (priceDataResponse !== null) {
+                if (priceDataResponse) {
                     setPriceData(priceDataResponse);
                     setEbitData(ebitDataResponse);
                     setBalanceSheetData(balanceSheetDataResponse);
@@ -57,6 +57,7 @@ function Dashboard() {
                 }
             }
             catch (exception) {
+                alert(`Error: check ticker symbol.`);
                 console.log(exception);             
             }
         }
