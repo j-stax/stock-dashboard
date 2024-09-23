@@ -7,17 +7,18 @@ function TickerBanner() {
         { id: 1, symbol: "NVDA", price: "" },
         { id: 2, symbol: "AMD", price: "" },
         { id: 3, symbol: "TSLA", price: "" },
-        { id: 4, symbol: "PLTR", price: "" },
-        { id: 5, symbol: "META", price: "" },
-        { id: 6, symbol: "AAPL", price: "" },
-        { id: 7, symbol: "GOOGL", price: "" },
-        { id: 8, symbol: "AMZN", price: "" },
-        { id: 9, symbol: "MSFT", price: "" },
-        { id: 10, symbol: "USD/CAD", price: "" },
-        { id: 11, symbol: "USD/JPY", price: "" },
-        { id: 12, symbol: "EUR/CAD", price: "" },
-        { id: 13, symbol: "GBP/CAD", price: "" },
-        { id: 14, symbol: "BTC", price: "" }
+        { id: 4, symbol: "UBER", price: "" },
+        { id: 5, symbol: "AAPL", price: "" },
+        { id: 6, symbol: "PLTR", price: "" },
+        { id: 7, symbol: "META", price: "" },
+        { id: 8, symbol: "GOOGL", price: "" },
+        { id: 9, symbol: "AMZN", price: "" },
+        { id: 10, symbol: "MSFT", price: "" },
+        { id: 11, symbol: "USD/CAD", price: "" },
+        { id: 12, symbol: "USD/JPY", price: "" },
+        { id: 13, symbol: "EUR/CAD", price: "" },
+        { id: 14, symbol: "GBP/CAD", price: "" },
+        { id: 15, symbol: "BTC", price: "" }
     ]);
 
     async function getExchangeRate(pair, apiKey) {

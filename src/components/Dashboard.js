@@ -12,6 +12,7 @@ import CapexBarChart from "./CapexBarChart";
 import FetchData from "../utils/API";
 import DCFModel from "./DCFModel";
 import TickerBanner from "./TickerBanner";
+import NewsList from "./NewsList";
 
 function Dashboard() {
     const [tickerInput, setTickerInput] = useState("NVDA");
@@ -42,7 +43,7 @@ function Dashboard() {
                 const priceDataResponse = await FetchData(tickerInput, "price");
                 const ebitDataResponse = await FetchData(tickerInput, "ebit");
                 const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
-                const capexDataResponse = await FetchData(tickerInput, "capex");
+                const capexDataResponse = await FetchData(tickerInput, "capex");   
 
                 setIsLoading(false);
                 if (priceDataResponse && ebitDataResponse) {
@@ -57,7 +58,7 @@ function Dashboard() {
                 }
             }
             catch (exception) {
-                alert(`Error: check ticker symbol.`);
+                alert(`Catch Error: check ticker symbol.`);
                 console.log(exception);             
             }
         }
@@ -105,6 +106,7 @@ function Dashboard() {
                             </Col>
                         </Row>
                     </Container>
+                    <NewsList ticker={tickerInput} />
                     <DCFModel cash={balanceSheetData[0].cash} debt={balanceSheetData[0].debt} shares={balanceSheetData[0].shares} />
                 </>
             }

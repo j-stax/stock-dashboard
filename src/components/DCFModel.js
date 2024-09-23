@@ -1,4 +1,5 @@
 import Table from "react-bootstrap/Table";
+import { Container } from "react-bootstrap";
 import { useState } from "react";
 
 function DCFModel(props) {
@@ -119,9 +120,9 @@ function DCFModel(props) {
     }
 
     return (
-        <>
+        <Container className="mt-5">
             <h2 className="display-5">DCF Model</h2>
-            <Table striped bordered size="sm" className="w-50">
+            <Table striped bordered size="sm" className="w-50 mt-3">
                 <thead>
                     <tr>
                         <th colSpan={2}>Assumptions</th>
@@ -513,7 +514,7 @@ function DCFModel(props) {
             <div>
                 <p className="fs-6">* Year 6 discount factor uses the terminal rate = expected discount rate - terminal growth rate</p>
             </div>
-        </>
+        </Container>
     );
 }
 
