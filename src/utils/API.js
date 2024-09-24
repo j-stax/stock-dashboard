@@ -88,14 +88,25 @@ async function FetchData(ticker, type) {
         }
         else if (result["feed"]) {
             const newsFeed = result["feed"];
+            const size = newsFeed.length;
+
+            if (size === 0) {
+                return null;
+            }
 
             try {
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < size; i ++) {
+
+                    if (count > 5 || i === size) {
+                        break;
+                    }
+
+                    let news = newsFeed[i];
 
                     const newsObj = {
                         id: count,
-                        headline: newsFeed[i]["title"].length > 100 ? newsFeed[i]["title"].substring(0, 100) + "..." : newsFeed[i]["title"],
-                        url: newsFeed[i]["url"]
+                        headline: news["title"].length > 100 ? news["title"].substring(0, 100) + "..." : news["title"],
+                        url: news["url"]
                     };
 
                     dataArray.push(newsObj);

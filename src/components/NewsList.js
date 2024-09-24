@@ -12,7 +12,7 @@ function NewsList(props) {
                 setNewsData(newsDataResponse);
             }
             else {
-                alert("Error fetching news data.");
+                alert("API did not return any news data.");
                 console.log("Error fetching news data.");
             }
         }
