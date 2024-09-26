@@ -6,13 +6,13 @@ import { Container } from "react-bootstrap";
 
 Chart.register(CategoryScale);
 
-function WorkingCapBarChart(props) {
+function DeprecAndAmortBarChart(props) {
 
     const chartData = {
         labels: props.data.map((data) => data.year),
         datasets: [
             {
-                label: "Working Capital $Millions (5 Years)",
+                label: "Depreciation and Amortization",
                 data: props.data.map((data) => data.value),
                 backgroundColor: "cyan"
             }
@@ -29,7 +29,7 @@ function WorkingCapBarChart(props) {
                     plugins: {
                         title: {
                             display: true,
-                            text: "Working Capital"
+                            text: "Depreciation and Amortization"
                         },
                         legend: {
                             display: false
@@ -48,11 +48,11 @@ function WorkingCapBarChart(props) {
                                 text: "$Millions"
                             }
                         }
-                    }        
+                    }
                 }}
             />
         </Container>
     );
 }
 
-export default WorkingCapBarChart;
+export default DeprecAndAmortBarChart;

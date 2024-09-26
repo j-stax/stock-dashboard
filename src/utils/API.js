@@ -29,12 +29,18 @@ async function FetchData(ticker, type) {
         "11": "12",
     };
 
-    let dataArray = [];         // return container to hold relevant data
+    let dataArray = [];         // Container to hold relevant data
     let urlFunction = "";
-       
+
     switch (type) {
         case "ebit":
             urlFunction = "INCOME_STATEMENT";
+            break;
+        case "deprecAndAmortization":
+            urlFunction = "INCOME_STATEMENT";
+            break;
+        case "working capital":
+            urlFunction = "BALANCE_SHEET";
             break;
         case "balance sheet":
             urlFunction = "BALANCE_SHEET";
@@ -51,6 +57,7 @@ async function FetchData(ticker, type) {
 
     const apiKey = "Y7I5R3PL5KTSMQB2";
     let url;
+
     if (urlFunction === "NEWS_SENTIMENT") {
         const date = new Date();
         const yearMonthDay = `${date.getFullYear()}${monthMap[date.getMonth()]}${date.getDate()}`;
@@ -63,131 +70,157 @@ async function FetchData(ticker, type) {
     const response = await fetch(url);  // API call
 
     if (response.ok) {
-        const result = await response.json();
-        let count = 1;
 
-        // Price data
-        if (result["Monthly Adjusted Time Series"]) {
-            const priceData = result["Monthly Adjusted Time Series"];
+        try {
 
-            for (let month in priceData) {
+            const result = await response.json();
+            let count = 1;
 
-                if (count > 12) {
-                    break;
-                }
+            // Price data
+            if (type === "price") {
+                const priceData = result["Monthly Adjusted Time Series"];
 
-                const newPriceObj = {
-                    id: count,
-                    date: dateMap[month.substring(5, 7)],
-                    value: parseFloat(priceData[month]["5. adjusted close"]).toFixed(2)
-                };
-                
-                dataArray.push(newPriceObj);
-                count += 1;
-            }
-        }
-        else if (result["feed"]) {
-            const newsFeed = result["feed"];
-            const size = newsFeed.length;
+                for (let month in priceData) {
 
-            if (size === 0) {
-                return null;
-            }
-
-            try {
-                for (let i = 0; i < size; i ++) {
-
-                    if (count > 5 || i === size) {
+                    if (count > 12) {
                         break;
                     }
 
-                    let news = newsFeed[i];
-
-                    const newsObj = {
+                    const newPriceObj = {
                         id: count,
-                        headline: news["title"].length > 100 ? news["title"].substring(0, 100) + "..." : news["title"],
-                        url: news["url"]
+                        date: dateMap[month.substring(5, 7)],
+                        value: parseFloat(priceData[month]["5. adjusted close"]).toFixed(2)
                     };
-
-                    dataArray.push(newsObj);
+                    
+                    dataArray.push(newPriceObj);
                     count += 1;
                 }
             }
-            catch (exception) {
-                console.log(exception);
+            else if (type === "ebit") {                 // Earnings data
+                const annualReports = result["annualReports"];
+
+                for (let statement of annualReports) {
+                    if (count > 5) {
+                        break;
+                    }
+
+                    const newEbitObj = {
+                        id: count,
+                        year: statement["fiscalDateEnding"].substring(0, 4),
+                        value: parseInt(statement["ebit"]) / 1000000
+                    };
+
+                    dataArray.push(newEbitObj);
+                    count += 1;
+                }
+            }
+            else if (type === "deprecAndAmortization") {       // depreciation and amortization
+                const annualReports = result["annualReports"];
+
+                for (let statement of annualReports) {
+                    if (count > 5) {
+                        break;
+                    }
+
+                    let newDeprecAndAmortObj = {
+                        id: count,
+                        year: statement["fiscalDateEnding"].substring(0, 4),
+                        value: Math.round(parseInt(statement["depreciationAndAmortization"]) / 1000000)
+                    };
+
+                    dataArray.push(newDeprecAndAmortObj);
+                    count += 1;
+                }
+            }
+            else if (type === "news") {              // News headlines and URLs
+                const newsFeed = result["feed"];
+                const size = newsFeed.length;
+
+                if (size === 0) {
+                    return null;
+                }
+
+                try {
+                    for (let i = 0; i < size; i ++) {
+
+                        if (count > 5 || i === size) {
+                            break;
+                        }
+
+                        let news = newsFeed[i];
+
+                        const newsObj = {
+                            id: count,
+                            headline: news["title"].length > 100 ? news["title"].substring(0, 100) + "..." : news["title"],
+                            url: news["url"]
+                        };
+
+                        dataArray.push(newsObj);
+                        count += 1;
+                    }
+                }
+                catch (exception) {
+                    console.log(exception);
+                    return null;
+                }
+            }
+            else if (type === "working capital") {       // Working capital
+                const annualReports = result["annualReports"];
+
+                for (let balanceSheet of annualReports) {
+                    if (count > 5) {
+                        break;
+                    }
+
+                    let acctsReceivables = parseInt(balanceSheet["currentNetReceivables"]);
+                    let inventory = parseInt(balanceSheet["inventory"]);
+                    let acctsPayable = parseInt(balanceSheet["currentAccountsPayable"]);
+                    let workingCapital = (acctsReceivables + inventory - acctsPayable) / 1000000;
+
+                    const workingCapObj = {
+                        id: count,
+                        year: balanceSheet["fiscalDateEnding"].substring(0, 4),
+                        value: workingCapital
+                    };
+
+                    dataArray.push(workingCapObj);
+                    count += 1;
+                }
+            }
+            else if (type === "balance sheet") {        // Cash, debt, common shares outstanding
+                const annualReports = result["annualReports"];
+                const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndShortTermInvestments"]) / 1000000);
+                const totalDebt = Math.round( (parseInt(annualReports[0]["shortTermDebt"]) + parseInt(annualReports[0]["longTermDebt"])) / 1000000);
+                const shareCount = Math.round(parseInt(annualReports[0]["commonStockSharesOutstanding"]) / 1000000);
+
+                dataArray.push(cashAndCashEquiv);
+                dataArray.push(totalDebt);
+                dataArray.push(shareCount);
+            }
+            else if (type === "capex") {       // CapEx data
+                const annualReports = result["annualReports"];
+
+                for (let statement of annualReports) {
+                    if (count > 5) {
+                        break;
+                    }
+
+                    const capexObj = {
+                        id: count,
+                        year: statement["fiscalDateEnding"].substring(0, 4),
+                        value: parseInt(statement["capitalExpenditures"]) / 1000000
+                    };
+
+                    dataArray.push(capexObj);
+                    count += 1;
+                };
+            }
+            else {
                 return null;
             }
         }
-        else if (result["annualReports"][0]["totalAssets"]) {       // cash, debt, common shares outstanding, working capital
-            
-            const annualReports = result["annualReports"];
-            const cashAndCashEquiv = Math.round(parseInt(annualReports[0]["cashAndShortTermInvestments"]) / 1000000);
-            const totalDebt = Math.round( (parseInt(annualReports[0]["shortTermDebt"]) + parseInt(annualReports[0]["longTermDebt"])) / 1000000);
-            const shareCount = Math.round(parseInt(annualReports[0]["commonStockSharesOutstanding"]) / 1000000);
-
-            for (let balanceSheet of annualReports) {
-                if (count > 5) {
-                    break;
-                }
-
-                let acctsReceivables = parseInt(balanceSheet["currentNetReceivables"]);
-                let inventory = parseInt(balanceSheet["inventory"]);
-                let acctsPayable = parseInt(balanceSheet["currentAccountsPayable"]);
-                let workingCapital = (acctsReceivables + inventory - acctsPayable) / 1000000;
-
-                const balanceSheetObj = {
-                    id: count,
-                    year: balanceSheet["fiscalDateEnding"].substring(0, 4),
-                    workingCapital: workingCapital
-                };
-
-                if (count === 1) {
-                    balanceSheetObj["cash"] = cashAndCashEquiv;
-                    balanceSheetObj["debt"] = totalDebt;
-                    balanceSheetObj["shares"] = shareCount;
-                }
-
-                dataArray.push(balanceSheetObj);
-                count += 1;
-            }
-        }
-        else if (result["annualReports"][0]["capitalExpenditures"]) {       // CapEx data
-            const annualReports = result["annualReports"];
-
-            for (let statement of annualReports) {
-                if (count > 5) {
-                    break;
-                }
-
-                const capexObj = {
-                    id: count,
-                    year: statement["fiscalDateEnding"].substring(0, 4),
-                    value: parseInt(statement["capitalExpenditures"]) / 1000000
-                };
-
-                dataArray.push(capexObj);
-                count += 1;
-            };
-        }
-        else if (result["annualReports"]) {                 // Earnings data
-            const annualReports = result["annualReports"];
-
-            for (let statement of annualReports) {
-                if (count > 5) {
-                    break;
-                }
-
-                const newEbitObj = {
-                    id: count,
-                    year: statement["fiscalDateEnding"].substring(0, 4),
-                    value: parseInt(statement["ebit"]) / 1000000
-                };
-
-                dataArray.push(newEbitObj);
-                count += 1;
-            }
-        }
-        else {
+        catch (exception) {
+            console.log(exception);
             return null;
         }
     }

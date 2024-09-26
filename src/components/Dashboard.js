@@ -1,14 +1,9 @@
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import { Spinner } from "react-bootstrap";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import PriceLineChart from "./PriceLineChart";
-import EbitBarChart from "./EbitBarChart";
-import WorkingCapBarChart from "./WorkingCapBarChart";
-import CapexBarChart from "./CapexBarChart";
+import Charts from "./Charts";
 import FetchData from "../utils/API";
 import DCFModel from "./DCFModel";
 import TickerBanner from "./TickerBanner";
@@ -16,10 +11,12 @@ import NewsList from "./NewsList";
 
 function Dashboard() {
     const [tickerInput, setTickerInput] = useState("NVDA");
+    const [balanceSheetData, setBalanceSheetData] = useState([]);
     const [priceData, setPriceData] = useState([]);
     const [ebitData, setEbitData] = useState([]);
-    const [balanceSheetData, setBalanceSheetData] = useState([]);
+    const [workingCapData, setWorkingCapData] = useState([]);
     const [capexData, setCapexData] = useState([]);
+    const [deprecAndAmortData, setDeprecAndAmortData] = useState([]);
     const [responseOk, setResponseOk] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -37,33 +34,31 @@ function Dashboard() {
     }
 
     useEffect( () => {
-        async function getStockData() {
-            try {
-                setIsLoading(true);            
-                const priceDataResponse = await FetchData(tickerInput, "price");
-                const ebitDataResponse = await FetchData(tickerInput, "ebit");
-                const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
-                const capexDataResponse = await FetchData(tickerInput, "capex");   
+        async function fetchStockData() {
+            setIsLoading(true);            
+            const priceDataResponse = await FetchData(tickerInput, "price");
+            const ebitDataResponse = await FetchData(tickerInput, "ebit");
+            const deprecAndAmortResponse = await FetchData(tickerInput, "deprecAndAmortization");
+            const workingCapDataResponse = await FetchData(tickerInput, "working capital");
+            const capexDataResponse = await FetchData(tickerInput, "capex");
+            const balanceSheetDataResponse = await FetchData(tickerInput, "balance sheet");
+            setIsLoading(false);
 
-                setIsLoading(false);
-                if (priceDataResponse && ebitDataResponse) {
-                    setPriceData(priceDataResponse);
-                    setEbitData(ebitDataResponse);
-                    setBalanceSheetData(balanceSheetDataResponse);
-                    setCapexData(capexDataResponse);
-                    setResponseOk(true);
-                }
-                else {
-                    alert(`Error: Check ticker symbol.`);
-                }
+            if (priceDataResponse && balanceSheetDataResponse ) {
+                setPriceData(priceDataResponse);
+                setEbitData(ebitDataResponse);
+                setDeprecAndAmortData(deprecAndAmortResponse);
+                setCapexData(capexDataResponse);
+                setWorkingCapData(workingCapDataResponse);
+                setBalanceSheetData(balanceSheetDataResponse);
+                setResponseOk(true);
             }
-            catch (exception) {
-                alert(`Catch Error: check ticker symbol.`);
-                console.log(exception);             
+            else {
+                alert(`Error fetching data. Check ticker symbol.`);
             }
         }
 
-        getStockData();
+        fetchStockData();
     },  [tickerInput]);
 
     return (
@@ -87,27 +82,15 @@ function Dashboard() {
             }
             {responseOk && 
                 <>
-                    <Container className="mb-5">
-                        <h1 className="display-5 mb-4">Financial Data</h1>
-                        <Row>
-                            <Col>
-                                <PriceLineChart ticker={tickerInput} data={[...priceData].reverse()} />
-                            </Col>
-                            <Col>
-                                <EbitBarChart ticker={tickerInput} data={[...ebitData].reverse()} />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <WorkingCapBarChart ticker={tickerInput} data={[...balanceSheetData].reverse()} />
-                            </Col>
-                            <Col>
-                                <CapexBarChart ticker={tickerInput} data={[...capexData].reverse()} />
-                            </Col>
-                        </Row>
-                    </Container>
+                    <Charts 
+                        ticker={tickerInput} 
+                        priceData={priceData} 
+                        ebitData={ebitData} 
+                        deprecAndAmortData={deprecAndAmortData} 
+                        capexData={capexData} 
+                        workingCapData={workingCapData} />
                     <NewsList ticker={tickerInput} />
-                    <DCFModel cash={balanceSheetData[0].cash} debt={balanceSheetData[0].debt} shares={balanceSheetData[0].shares} />
+                    <DCFModel cash={balanceSheetData[0]} debt={balanceSheetData[1]} shares={balanceSheetData[2]} />
                 </>
             }
         </Container>
