@@ -60,7 +60,9 @@ async function FetchData(ticker, type) {
 
     if (urlFunction === "NEWS_SENTIMENT") {
         const date = new Date();
-        const yearMonthDay = `${date.getFullYear()}${monthMap[date.getMonth()]}${date.getDate()}`;
+        let day = date.getDate().toString()
+        day = (day.length === 1) ? ("0" + day) : day;
+        const yearMonthDay = `${date.getFullYear()}${monthMap[date.getMonth()]}${day}`;
         url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${ticker}&time_from=${yearMonthDay}T1000&apikey=${apiKey}`;
     }
     else {
