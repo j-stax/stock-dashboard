@@ -122,7 +122,7 @@ function DCFModel(props) {
     return (
         <Container className="mt-5">
             <h2 className="display-5">DCF Model</h2>
-            <Table striped bordered size="sm" className="w-50 mt-3">
+            <Table resonsive striped bordered size="sm" className="w-50 mt-3">
                 <thead>
                     <tr>
                         <th colSpan={2}>Assumptions</th>
@@ -184,7 +184,7 @@ function DCFModel(props) {
                 </tbody>
             </Table>
             <div style={{ minWidth: "800px", overflowX: "auto" }}>
-                <Table striped bordered hover className="table caption-top">
+                <Table striped bordered hover className="w-100 table caption-top">
                     <caption><strong>Valuation ($Millions)</strong></caption>
                     <thead>
                         <tr className="text-center">
