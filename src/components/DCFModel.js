@@ -183,7 +183,7 @@ function DCFModel(props) {
                     </tr>
                 </tbody>
             </Table>
-            <Table responsive="lg" striped bordered className="table caption-top">
+            <Table responsive="sm" striped bordered className="table caption-top">
                 <caption><strong>Valuation ($Millions)</strong></caption>
                 <thead>
                     <tr className="text-center">
