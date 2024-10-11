@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/stock-dashboard/static/js/main.bf333b74.js",
+    "main.js": "/stock-dashboard/static/js/main.f75aaae2.js",
     "index.html": "/stock-dashboard/index.html",
-    "main.bf333b74.js.map": "/stock-dashboard/static/js/main.bf333b74.js.map"
+    "main.f75aaae2.js.map": "/stock-dashboard/static/js/main.f75aaae2.js.map"
   },
   "entrypoints": [
-    "static/js/main.bf333b74.js"
+    "static/js/main.f75aaae2.js"
   ]
 }
