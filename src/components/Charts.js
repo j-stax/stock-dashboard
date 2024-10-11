@@ -29,7 +29,7 @@ function Charts(props) {
     }, [ticker]);
     
     return (
-        <Container className="mb-5">
+        <Container fluid className="mb-5">
             <h1 className="display-5 mb-4">{ticker} Historical Financial Data</h1>
             <Row>
                 <Col>
