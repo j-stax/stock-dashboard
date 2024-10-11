@@ -122,8 +122,8 @@ function DCFModel(props) {
     return (
         <Container className="mt-5">
             <h2 className="display-5">DCF Model</h2>
-            <div style={{ minWidth: "500px" }}>
-                <Table resonsive striped bordered size="sm" className="w-50 mt-3">
+            <div style={{ width: "100vw" }}>
+                <Table resonsive striped bordered size="sm" className="w-25 mt-3">
                     <thead>
                         <tr>
                             <th colSpan={2}>Assumptions</th>
