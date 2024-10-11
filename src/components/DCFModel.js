@@ -122,67 +122,69 @@ function DCFModel(props) {
     return (
         <Container className="mt-5">
             <h2 className="display-5">DCF Model</h2>
-            <Table resonsive striped bordered size="sm" className="w-50 mt-3">
-                <thead>
-                    <tr>
-                        <th colSpan={2}>Assumptions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td className="w-75">EBIT growth rate</td>
-                        <td className="text-center">
-                            <input
-                                className="w-50 text-center me-1"
-                                type="text"
-                                id="growthRate"
-                                name="growthRate"
-                                value={assumps.growthRate || 0} 
-                                onChange={handleAssumpChange} 
-                            />%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Tax rate</td>
-                        <td className="text-center">
-                            <input
-                                className="w-50 text-center me-1"
-                                type="text"
-                                id="taxRate"
-                                name="taxRate"
-                                value={assumps.taxRate || 0} 
-                                onChange={handleAssumpChange} 
-                            />%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Discount Rate</td>
-                        <td className="text-center">
-                            <input
-                                className="w-50 text-center me-1"
-                                type="text"
-                                id="discRate"
-                                name="discRate"
-                                value={assumps.discRate || 0} 
-                                onChange={handleAssumpChange} 
-                            />%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Terminal Rate</td>
-                        <td className="text-center">
-                            <input
-                                className="w-50 text-center me-1"
-                                type="text"
-                                id="terminalRate"
-                                name="terminalRate"
-                                value={assumps.terminalRate || 0} 
-                                onChange={handleAssumpChange} 
-                            />%
-                        </td>
-                    </tr>
-                </tbody>
-            </Table>
+            <div style={{ minWidth: "500px" }}>
+                <Table resonsive striped bordered size="sm" className="w-50 mt-3">
+                    <thead>
+                        <tr>
+                            <th colSpan={2}>Assumptions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="w-75">EBIT growth rate</td>
+                            <td className="text-center">
+                                <input
+                                    className="w-50 text-center me-1"
+                                    type="text"
+                                    id="growthRate"
+                                    name="growthRate"
+                                    value={assumps.growthRate || 0} 
+                                    onChange={handleAssumpChange} 
+                                />%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tax rate</td>
+                            <td className="text-center">
+                                <input
+                                    className="w-50 text-center me-1"
+                                    type="text"
+                                    id="taxRate"
+                                    name="taxRate"
+                                    value={assumps.taxRate || 0} 
+                                    onChange={handleAssumpChange} 
+                                />%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Discount Rate</td>
+                            <td className="text-center">
+                                <input
+                                    className="w-50 text-center me-1"
+                                    type="text"
+                                    id="discRate"
+                                    name="discRate"
+                                    value={assumps.discRate || 0} 
+                                    onChange={handleAssumpChange} 
+                                />%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Terminal Rate</td>
+                            <td className="text-center">
+                                <input
+                                    className="w-50 text-center me-1"
+                                    type="text"
+                                    id="terminalRate"
+                                    name="terminalRate"
+                                    value={assumps.terminalRate || 0} 
+                                    onChange={handleAssumpChange} 
+                                />%
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
+            </div>
             <div style={{ minWidth: "800px", overflowX: "auto" }}>
                 <Table striped bordered hover className="w-100 table caption-top">
                     <caption><strong>Valuation ($Millions)</strong></caption>
