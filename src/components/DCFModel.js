@@ -183,334 +183,336 @@ function DCFModel(props) {
                     </tr>
                 </tbody>
             </Table>
-            <Table responsive="sm" striped bordered className="table caption-top">
-                <caption><strong>Valuation ($Millions)</strong></caption>
-                <thead>
-                    <tr className="text-center">
-                        <th className="w-25 text-start">Year</th>
-                        <th>0</th>
-                        <th>1</th>
-                        <th>2</th>
-                        <th>3</th>
-                        <th>4</th>
-                        <th>5</th>
-                        <th>6</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>EBIT</td>
-                        <td className="text-center">
-                            <input 
-                                type="text" 
-                                className="w-75 text-end"
-                                id="ebit" 
-                                name="ebit"
-                                value={yearZeroVals.ebit || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+            <div style={{ minWidth: "800px", overflowX: "auto" }}>
+                <Table striped bordered hover className="table caption-top">
+                    <caption><strong>Valuation ($Millions)</strong></caption>
+                    <thead>
+                        <tr className="text-center">
+                            <th className="w-25 text-start">Year</th>
+                            <th>0</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>EBIT</td>
+                            <td className="text-center">
+                                <input 
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="ebit" 
+                                    name="ebit"
+                                    value={yearZeroVals.ebit || 0}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"ebit" + (index+1)}
+                                        name={"ebit" + (index+1)}
+                                        value={forecastVals["ebit" + (index+1)] = generateForecast("ebit", index+1) || 0}
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>&#8722; taxes</td>   
+                            <td className="text-center">
+                                <input 
+                                    disabled
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="taxes" 
+                                    name="taxes"
+                                    value={yearZeroVals.taxes = Math.round(yearZeroVals.ebit * parseFloat(assumps.taxRate/100) || 0)}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"taxes" + (index+1)}
+                                        name={"taxes" + (index+1)}
+                                        value={forecastVals["taxes" + (index+1)]= generateForecast("taxes", index+1) || 0} 
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>&#61; EBIAT</td>
+                            <td className="text-center">
+                                <input
+                                    disabled
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="ebiat" 
+                                    name="ebiat"
+                                    value={yearZeroVals.ebiat = parseInt(yearZeroVals.ebit) - parseInt(yearZeroVals.taxes) || 0}
+                                    onChange={handleYearZeroChange} />
+                            </td> 
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"ebiat" + (index+1)}
+                                        name={"ebiat" + (index+1)}
+                                        value={forecastVals["ebiat" + (index+1)] = generateForecast("ebiat", index+1) || 0}
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}  
+                        </tr>
+                        <tr>
+                            <td>&#43; depreciation and amortization</td>
+                            <td className="text-center">
+                                <input 
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="deprecAndAmort" 
+                                    name="deprecAndAmort"
+                                    value={yearZeroVals.deprecAndAmort = parseInt(yearZeroVals.deprecAndAmort) || 0}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"deprecAndAmort" + (index+1)}
+                                        name={"deprecAndAmort" + (index+1)}
+                                        value={forecastVals["deprecAndAmort" + (index+1)] = generateForecast("deprecAndAmort", index+1)}
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>&#8722; change in working capital</td>
+                            <td className="text-center">
+                                <input 
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="chngInWorkingCap" 
+                                    name="chngInWorkingCap"
+                                    value={yearZeroVals.chngInWorkingCap = parseInt(yearZeroVals.chngInWorkingCap) || 0}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"chngInWorkingCap" + (index+1)}
+                                        name={"chngInWorkingCap" + (index+1)}
+                                        value={forecastVals["chngInWorkingCap" + (index+1)] = parseInt(forecastVals["chngInWorkingCap" + (index+1)]) || 0}
+                                        onChange={handleForecastChange} />
+                                </td>        
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>&#8722; capital expenditures</td>
+                            <td className="text-center">
+                                <input 
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="capex" 
+                                    name="capex"
+                                    value={yearZeroVals.capex = parseInt(yearZeroVals.capex) || 0}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"capex" + (index+1)}
+                                        name={"capex" + (index+1)}
+                                        value={forecastVals["capex" + (index+1)] = generateForecast("capex", index+1) || 0}
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>&#61; free cash flow</td>
+                            <td className="text-center">
+                                <input
+                                    disabled
+                                    type="text" 
+                                    className="w-75 text-end"
+                                    id="fcf" 
+                                    name="fcf"
+                                    value={yearZeroVals.fcf = yearZeroVals.ebiat + yearZeroVals.deprecAndAmort
+                                                - yearZeroVals.chngInWorkingCap - yearZeroVals.capex}
+                                    onChange={handleYearZeroChange} />
+                            </td>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"fcf" + (index+1)}
+                                        name={"fcf" + (index+1)}
+                                        value={forecastVals["fcf" + (index+1)] = generateForecast("fcf", index+1)}
+                                        onChange={handleForecastChange} />
+                                </td>
+                            ))}
+                        </tr>
+                        <tr>
+                            <td>Discount factor</td>
+                            <td className="text-center">
                                 <input
                                     disabled
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"ebit" + (index+1)}
-                                    name={"ebit" + (index+1)}
-                                    value={forecastVals["ebit" + (index+1)] = generateForecast("ebit", index+1) || 0}
-                                    onChange={handleForecastChange} />
+                                    id="discountFactor"
+                                    name="discountFactor"
+                                    value={parseFloat(1).toFixed(2)} />
                             </td>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>&#8722; taxes</td>   
-                        <td className="text-center">
-                            <input 
-                                disabled
-                                type="text" 
-                                className="w-75 text-end"
-                                id="taxes" 
-                                name="taxes"
-                                value={yearZeroVals.taxes = Math.round(yearZeroVals.ebit * parseFloat(assumps.taxRate/100) || 0)}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"discountFactor" + (index+1)}
+                                        name={"discountFactor" + (index+1)}
+                                        value={forecastVals["discountFactor" + (index+1)] = generateForecast("discountFactor", index+1)}
+                                        onChange={forecastVals["discountFactor" + (index+1)]} />
+                                </td>
+                            ))}
+                            <td className="text-center">*
+                                <input 
+                                    type="text"
+                                    className="w-75 text-end"
+                                    id="discountFactor6"
+                                    name="discountFactor6"
+                                    value={forecastVals.discountFactor6 = generateForecast("discountFactor6", 6) }
+                                    onChange={handleForecastChange}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Present value of free cash flow</td>
+                            <td className="text-center">
                                 <input
                                     disabled
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"taxes" + (index+1)}
-                                    name={"taxes" + (index+1)}
-                                    value={forecastVals["taxes" + (index+1)]= generateForecast("taxes", index+1) || 0} 
-                                    onChange={handleForecastChange} />
+                                    id="pvCashFlow"
+                                    name="pvCashFlow"
+                                    value={yearZeroVals.fcf}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>&#61; EBIAT</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text" 
-                                className="w-75 text-end"
-                                id="ebiat" 
-                                name="ebiat"
-                                value={yearZeroVals.ebiat = parseInt(yearZeroVals.ebit) - parseInt(yearZeroVals.taxes) || 0}
-                                onChange={handleYearZeroChange} />
-                        </td> 
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <td key={index} className="text-center">
+                                    <input
+                                        disabled
+                                        type="text"
+                                        className="w-75 text-end"
+                                        id={"pvCashFlow" + (index+1)}
+                                        name={"pvCashFlow" + (index+1)}
+                                        value={forecastVals["pvCashFlow" + (index+1)] = generateForecast("pvCashFlow", index+1)} 
+                                    /> 
+                                </td>
+                            ))}
+                            <td className="text-center">
+                                <input 
+                                    disabled
+                                    type="text"
+                                    className="w-75 text-end"
+                                    id="pvCashFlow6"
+                                    name="pvCashFlow6"
+                                    value={forecastVals.pvCashFlow6 = Math.round(forecastVals.fcf6 * forecastVals.discountFactor6)}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cumulative PV of free cash flow</td>
+                            <td className="text-center">
                                 <input
                                     disabled
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"ebiat" + (index+1)}
-                                    name={"ebiat" + (index+1)}
-                                    value={forecastVals["ebiat" + (index+1)] = generateForecast("ebiat", index+1) || 0}
-                                    onChange={handleForecastChange} />
+                                    id="fcfTotal"
+                                    name="fcfTotal"
+                                    value={yearZeroVals.fcfTotal = generateForecast("fcfTotal", 1)}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}  
-                    </tr>
-                    <tr>
-                        <td>&#43; depreciation and amortization</td>
-                        <td className="text-center">
-                            <input 
-                                type="text" 
-                                className="w-75 text-end"
-                                id="deprecAndAmort" 
-                                name="deprecAndAmort"
-                                value={yearZeroVals.deprecAndAmort = parseInt(yearZeroVals.deprecAndAmort) || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                        </tr>
+                        <tr>
+                            <td>&#8722; debt</td>
+                            <td className="text-center">
                                 <input
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"deprecAndAmort" + (index+1)}
-                                    name={"deprecAndAmort" + (index+1)}
-                                    value={forecastVals["deprecAndAmort" + (index+1)] = generateForecast("deprecAndAmort", index+1)}
-                                    onChange={handleForecastChange} />
+                                    id="debt"
+                                    name="debt"
+                                    value={yearZeroVals.debt = yearZeroVals.debt || 0}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>&#8722; change in working capital</td>
-                        <td className="text-center">
-                            <input 
-                                type="text" 
-                                className="w-75 text-end"
-                                id="chngInWorkingCap" 
-                                name="chngInWorkingCap"
-                                value={yearZeroVals.chngInWorkingCap = parseInt(yearZeroVals.chngInWorkingCap) || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                        </tr>
+                        <tr>
+                            <td>&#43; cash</td>
+                            <td className="text-center">
                                 <input
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"chngInWorkingCap" + (index+1)}
-                                    name={"chngInWorkingCap" + (index+1)}
-                                    value={forecastVals["chngInWorkingCap" + (index+1)] = parseInt(forecastVals["chngInWorkingCap" + (index+1)]) || 0}
-                                    onChange={handleForecastChange} />
-                            </td>        
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>&#8722; capital expenditures</td>
-                        <td className="text-center">
-                            <input 
-                                type="text" 
-                                className="w-75 text-end"
-                                id="capex" 
-                                name="capex"
-                                value={yearZeroVals.capex = parseInt(yearZeroVals.capex) || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
-                                <input
-                                    type="text"
-                                    className="w-75 text-end"
-                                    id={"capex" + (index+1)}
-                                    name={"capex" + (index+1)}
-                                    value={forecastVals["capex" + (index+1)] = generateForecast("capex", index+1) || 0}
-                                    onChange={handleForecastChange} />
+                                    id="cash"
+                                    name="cash"
+                                    value={yearZeroVals.cash = yearZeroVals.cash || 0}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>&#61; free cash flow</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text" 
-                                className="w-75 text-end"
-                                id="fcf" 
-                                name="fcf"
-                                value={yearZeroVals.fcf = yearZeroVals.ebiat + yearZeroVals.deprecAndAmort
-                                            - yearZeroVals.chngInWorkingCap - yearZeroVals.capex}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 6 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                        </tr>
+                        <tr>
+                            <td>Shareholder value</td>
+                            <td className="text-center">
                                 <input
                                     disabled
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"fcf" + (index+1)}
-                                    name={"fcf" + (index+1)}
-                                    value={forecastVals["fcf" + (index+1)] = generateForecast("fcf", index+1)}
-                                    onChange={handleForecastChange} />
+                                    id="shareholderVal"
+                                    name="shareholderVal"
+                                    value={yearZeroVals.shareholderVal = generateForecast("shareholderVal", 0)}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                    </tr>
-                    <tr>
-                        <td>Discount factor</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text"
-                                className="w-75 text-end"
-                                id="discountFactor"
-                                name="discountFactor"
-                                value={parseFloat(1).toFixed(2)} />
-                        </td>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                        </tr>
+                        <tr>
+                            <td>No. of shares outstanding (Millions)</td>
+                            <td className="text-center">
                                 <input
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"discountFactor" + (index+1)}
-                                    name={"discountFactor" + (index+1)}
-                                    value={forecastVals["discountFactor" + (index+1)] = generateForecast("discountFactor", index+1)}
-                                    onChange={forecastVals["discountFactor" + (index+1)]} />
+                                    id="numShares"
+                                    name="numShares"
+                                    value={yearZeroVals.numShares || 0}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                        <td className="text-center">*
-                            <input 
-                                type="text"
-                                className="w-75 text-end"
-                                id="discountFactor6"
-                                name="discountFactor6"
-                                value={forecastVals.discountFactor6 = generateForecast("discountFactor6", 6) }
-                                onChange={handleForecastChange}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Present value of free cash flow</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text"
-                                className="w-75 text-end"
-                                id="pvCashFlow"
-                                name="pvCashFlow"
-                                value={yearZeroVals.fcf}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <td key={index} className="text-center">
+                        </tr>
+                        <tr>
+                            <td><strong>Implied share price</strong></td>
+                            <td className="text-center">
                                 <input
-                                    disabled
                                     type="text"
                                     className="w-75 text-end"
-                                    id={"pvCashFlow" + (index+1)}
-                                    name={"pvCashFlow" + (index+1)}
-                                    value={forecastVals["pvCashFlow" + (index+1)] = generateForecast("pvCashFlow", index+1)} 
-                                /> 
+                                    id="sharePrice"
+                                    name="sharePrice"
+                                    value={yearZeroVals.sharePrice = generateForecast("sharePrice", 0)}
+                                    onChange={handleYearZeroChange} />
                             </td>
-                        ))}
-                        <td className="text-center">
-                            <input 
-                                disabled
-                                type="text"
-                                className="w-75 text-end"
-                                id="pvCashFlow6"
-                                name="pvCashFlow6"
-                                value={forecastVals.pvCashFlow6 = Math.round(forecastVals.fcf6 * forecastVals.discountFactor6)}
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Cumulative PV of free cash flow</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text"
-                                className="w-75 text-end"
-                                id="fcfTotal"
-                                name="fcfTotal"
-                                value={yearZeroVals.fcfTotal = generateForecast("fcfTotal", 1)}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&#8722; debt</td>
-                        <td className="text-center">
-                            <input
-                                type="text"
-                                className="w-75 text-end"
-                                id="debt"
-                                name="debt"
-                                value={yearZeroVals.debt = yearZeroVals.debt || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&#43; cash</td>
-                        <td className="text-center">
-                            <input
-                                type="text"
-                                className="w-75 text-end"
-                                id="cash"
-                                name="cash"
-                                value={yearZeroVals.cash = yearZeroVals.cash || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Shareholder value</td>
-                        <td className="text-center">
-                            <input
-                                disabled
-                                type="text"
-                                className="w-75 text-end"
-                                id="shareholderVal"
-                                name="shareholderVal"
-                                value={yearZeroVals.shareholderVal = generateForecast("shareholderVal", 0)}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>No. of shares outstanding (Millions)</td>
-                        <td className="text-center">
-                            <input
-                                type="text"
-                                className="w-75 text-end"
-                                id="numShares"
-                                name="numShares"
-                                value={yearZeroVals.numShares || 0}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Implied share price</strong></td>
-                        <td className="text-center">
-                            <input
-                                type="text"
-                                className="w-75 text-end"
-                                id="sharePrice"
-                                name="sharePrice"
-                                value={yearZeroVals.sharePrice = generateForecast("sharePrice", 0)}
-                                onChange={handleYearZeroChange} />
-                        </td>
-                    </tr>
-                </tbody>
-            </Table>
+                        </tr>
+                    </tbody>
+                </Table>
+            </div>
             <div>
                 <p className="fs-6">* Year 6 discount factor uses the terminal rate = expected discount rate - terminal growth rate</p>
             </div>
