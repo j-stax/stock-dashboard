@@ -55,7 +55,7 @@ async function FetchData(ticker, type) {
             urlFunction = "TIME_SERIES_MONTHLY_ADJUSTED";
     }
 
-    const apiKey = "Y7I5R3PL5KTSMQB2";
+    const apiKey = "HWCZ8MM4K05A2PXH";
     let url;
 
     if (urlFunction === "NEWS_SENTIMENT") {

@@ -24,12 +24,12 @@ function TickerBanner() {
     async function getExchangeRate(pair, apiKey) {
         const numer = pair.substring(0, 3);
         const denom = pair.substring(4);
-        const forexUrl = `https://www.alphavantage.co/query?function=FX_INTRADAY&from_symbol=${numer}&to_symbol=${denom}&interval=5min&apikey=${apiKey}`;
+        const forexUrl = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_symbol=${numer}&to_symbol=${denom}&interval=5min&apikey=${apiKey}`;
         const forexResponse = await fetch(forexUrl);
         if (forexResponse.ok) {
             const forexResult = await forexResponse.json();
-            const lastRefreshed = forexResult["Meta Data"]["4. Last Refreshed"];
-            let exchRate = forexResult["Time Series FX (5min)"][lastRefreshed]["4. close"];
+            // const lastRefreshed = forexResult["Meta Data"]["4. Last Refreshed"];
+            let exchRate = forexResult["Realtime Currency Exchange Rate"]["5. Exchange Rate"];
             exchRate = parseFloat(exchRate).toFixed(3).toString();
             return exchRate;
         }   
@@ -38,14 +38,14 @@ function TickerBanner() {
 
     useEffect(() => {
         async function fetchTickerData() {
-            const apiKey = "Y7I5R3PL5KTSMQB2";
-            const btcUrl = `https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=5min&apikey=${apiKey}`;
+            const apiKey = "ZMU4WUWQX0PWD2YJ";
+            const btcUrl = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=BTC&to_currency=USD&apikey=${apiKey}`;
             let updatedBannerDataList = [...bannerDataList];
 
             for (let i = 0; i < bannerDataList.length; i++) {
                 let bannerDataListObject = bannerDataList[i];
                 let symbol = bannerDataListObject.symbol;
-                let stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=5min&entitlement=delayed&apikey=${apiKey}`;
+                let stockUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`;
                 let lastRefreshed = "";
 
                 switch (symbol) {
@@ -68,8 +68,8 @@ function TickerBanner() {
                     case "BTC":
                         let btcResponse = await fetch(btcUrl);
                         let btcResult = await btcResponse.json();
-                        lastRefreshed = btcResult["Meta Data"]["6. Last Refreshed"];
-                        let btcPrice = btcResult["Time Series Crypto (5min)"][lastRefreshed]["4. close"];
+                        lastRefreshed = btcResult["Realtime Currency Exchange Rate"];
+                        let btcPrice = btcResult["5. Exchange Rate"];
                         updatedBannerDataList[i].price = parseInt(btcPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                         break;
 
@@ -77,7 +77,7 @@ function TickerBanner() {
                         let stockResponse = await fetch(stockUrl);
                         let result = await stockResponse.json();
                         lastRefreshed = result["Meta Data"]["3. Last Refreshed"];
-                        let priceMap = result["Time Series (5min)"];
+                        let priceMap = result["Time Series (Daily)"];
                         let price = priceMap[lastRefreshed]["4. close"];
                         updatedBannerDataList[i].price = parseFloat(price).toFixed(2).toString();
                 }

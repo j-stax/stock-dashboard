@@ -63,12 +63,12 @@ function Dashboard() {
 
     return (
         <Container>
-            <TickerBanner />
+            {/* <TickerBanner /> */}
             <Form onSubmit={handleSubmit} className="mt-5 text-center">
                 <Form.Control 
                     type="text" 
                     id="ticker" 
-                    placeholder="Enter ticker (e.g., PLTR)"
+                    placeholder="Enter ticker (e.g., NVDA)"
                     autoFocus
                     className="w-25 d-inline mt-5 mb-5 text-uppercase" />
                 <Button type="submit" className="ms-2">Search</Button>
